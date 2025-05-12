@@ -1,5 +1,7 @@
 # Streamlit Project - Project Magang
 
+🔗 [Klik di sini untuk membuka aplikasi](https://project-magang-yjy2vt6y6rafu6eeaztkex.streamlit.app/)
+
 Ini adalah aplikasi berbasis Streamlit yang dibuat sebagai bagian dari kegiatan magang.
 
 ## 🚀 Fitur
@@ -20,3 +22,4 @@ Install dependensi:
 
 ```bash
 pip install -r requirements.txt
+```
