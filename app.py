@@ -21,7 +21,10 @@ def load_data():
 # Load data
 df = load_data()
 
-st.title("Analisis Program IUP di PTN")
+st.markdown(
+    "<h1 style='text-align: center;'>Dashboard Analisis Program IUP di PTN</h1>",
+    unsafe_allow_html=True
+)
 
 # 1. Jumlah PTN dan daftar jurusan per PTN
 jumlah_ptn = df['PTN'].nunique()
@@ -32,7 +35,7 @@ jurusan_per_ptn = df.groupby('PTN')['JURUSAN'].nunique()
 st.write(jurusan_per_ptn.sort_index())
 
 # 2. Visualisasi daya tampung per prodi dalam satu PTN
-st.subheader("Distribusi Daya Tampung per Prodi dalam PTN Terpilih")
+st.subheader("Distribusi Daya Tampung per Prodi dalam PTN yang dipilih")
 
 ptn_daya = st.selectbox("Pilih PTN untuk visualisasi daya tampung", sorted(df['PTN'].unique()), key='daya')
 data_daya = df[df['PTN'] == ptn_daya][['JURUSAN', 'DAYA TAMPUNG']].dropna()
@@ -48,7 +51,7 @@ fig3.update_traces(textinfo='label+value', hovertemplate='%{label}<br>Daya Tampu
 st.plotly_chart(fig3)
 
 # 3. Visualisasi UKT per prodi dalam satu PTN 
-st.subheader("Distribusi UKT per Prodi dalam PTN Terpilih")
+st.subheader("Distribusi UKT per Prodi dalam PTN yang dipilih")
 
 ptn_ukt = st.selectbox("Pilih PTN untuk visualisasi UKT", sorted(df['PTN'].unique()), key='ukt')
 data_ukt = df[df['PTN'] == ptn_ukt][['JURUSAN', 'UKT']].dropna().sort_values('UKT', ascending=False)
@@ -85,21 +88,20 @@ st.subheader("7 Prodi dengan UKT Tertinggi dari PTN Berbeda")
 ukt_termahal = df.loc[df.groupby('PTN')['UKT'].idxmax()][['PTN', 'JURUSAN', 'UKT']]
 ukt_termahal_top = ukt_termahal.sort_values('UKT', ascending=False).head(7)
 
-# Balik urutan agar tertinggi di atas
-ukt_termahal_top = ukt_termahal_top[::-1]
+# Gabungkan jadi label unik
+ukt_termahal_top['LABEL'] = ukt_termahal_top['PTN'] + " - " + ukt_termahal_top['JURUSAN']
 
 fig1 = px.bar(
-    ukt_termahal_top,
+    ukt_termahal_top[::-1],  # agar tertinggi di atas
     x='UKT',
-    y='PTN',
-    color='JURUSAN',
+    y='LABEL',
     orientation='h',
     title='7 Prodi dengan UKT Termahal dari PTN',
-    text='UKT'
+    text='UKT',
+    labels={'UKT': 'UKT (Rupiah)', 'LABEL': 'PTN - Jurusan'}
 )
 fig1.update_traces(
-    hovertemplate='%{y}<br>%{customdata[0]}<br>UKT: Rp %{x:,.0f}',
-    customdata=ukt_termahal_top[['JURUSAN']],
+    hovertemplate='%{y}<br>UKT: Rp %{x:,.0f}',
     texttemplate='Rp %{x:,.0f}',
     textposition='outside'
 )
@@ -133,3 +135,12 @@ fig2.update_traces(
     textposition='outside'
 )
 st.plotly_chart(fig2)
+
+hide_streamlit_style = """
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    </style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
