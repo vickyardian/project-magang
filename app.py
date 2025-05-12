@@ -114,27 +114,34 @@ st.plotly_chart(fig1)
 # 6. Visualisasi daya tampung tertinggi dari nilai tertinggi ke terendah
 st.subheader("7 Prodi dengan Daya Tampung Terbanyak dari PTN Berbeda")
 
-daya_terbanyak = df.loc[df.groupby('PTN')['DAYA TAMPUNG'].idxmax()][['PTN', 'JURUSAN', 'DAYA TAMPUNG']]
-daya_terbanyak_top = daya_terbanyak.sort_values('DAYA TAMPUNG', ascending=False).head(7)
+# Sortir data berdasarkan DAYA TAMPUNG tertinggi per PTN
+df_sorted = df.sort_values(by=["PTN", "DAYA TAMPUNG"], ascending=[True, False])
+daya_terbanyak = df_sorted.loc[df_sorted.groupby("PTN")["DAYA TAMPUNG"].idxmax()].drop_duplicates(subset="PTN")
+daya_terbanyak_top7 = daya_terbanyak.sort_values("DAYA TAMPUNG", ascending=False).head(7)
 
-# Balik urutan agar tertinggi di atas
-daya_terbanyak_top = daya_terbanyak_top[::-1]
+# Buat bar chart interaktif dengan plotly
+fig = px.bar(
+    daya_terbanyak_top7,
+    x="DAYA TAMPUNG",
+    y="PTN",
+    color="JURUSAN",
+    orientation="h",
+    hover_data={
+        "JURUSAN": True,
+        "PTN": False, #supaya tidak menampilkan PTN saat di hover
+        "DAYA TAMPUNG": True
+    },
+    title="7 Prodi dengan Daya Tampung Terbanyak dari PTN"
+)
 
-fig2 = px.bar(
-    daya_terbanyak_top,
-    x='DAYA TAMPUNG',
-    y='PTN',
-    color='JURUSAN',
-    orientation='h',
-    title='7 Prodi dengan Daya Tampung Terbanyak dari PTN',
-    text='DAYA TAMPUNG'
+fig.update_layout(
+    xaxis_title="Daya Tampung",
+    yaxis_title="PTN",
+    yaxis=dict(autorange="reversed"),  # agar yang tertinggi di atas
+    legend_title="JURUSAN"
 )
-fig2.update_traces(
-    hovertemplate='%{y}<br>%{customdata[0]}<br>Daya Tampung: %{x}',
-    customdata=daya_terbanyak_top[['JURUSAN']],
-    textposition='outside'
-)
-st.plotly_chart(fig2)
+
+st.plotly_chart(fig, use_container_width=True)
 
 hide_streamlit_style = """
     <style>
