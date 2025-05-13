@@ -7,7 +7,7 @@ Ini adalah aplikasi berbasis Streamlit yang dibuat sebagai bagian dari kegiatan 
 ## 🚀 Fitur
 
 - Antarmuka interaktif berbasis web
-- Input dan visualisasi data
+- Visualisasi data
 - Analisis sederhana menggunakan Python
 - Mudah dijalankan di lokal
 
