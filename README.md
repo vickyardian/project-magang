@@ -1,6 +1,6 @@
 # Streamlit Project - Project Magang
 
-🔗 [Klik di sini untuk membuka aplikasi](https://project-magang-yjy2vt6y6rafu6eeaztkex.streamlit.app/)
+🔗 [Klik di sini untuk membuka aplikasi](https://project-magang-6d85amxskqycosks5u2h8r.streamlit.app/)
 
 Ini adalah aplikasi berbasis Streamlit yang dibuat sebagai bagian dari kegiatan magang.
 
